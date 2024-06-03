@@ -87,13 +87,13 @@ public class MemberRepositoryJdbc implements MemberRepository {
     };
 
     @Override
-    public Boolean isExistEmail(String email) {
+    public Boolean isExistEmail(Long notthis, String email) {
         try{
             jdbcTemplate.queryForObject("""
                 SELECT id
                 FROM member
-                WHERE email = ? LIMIT 1
-                """, findIsResult, email);
+                WHERE id !=?, email = ? LIMIT 1
+                """, findIsResult, notthis, email);
             return true;
         }catch(Exception e) {
             return false;

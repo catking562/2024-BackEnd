@@ -39,7 +39,7 @@ public class MemberProxyService {
     public MemberResponse update(Long id, MemberUpdateRequest request) throws HTTPApiException {
         if(request.name()==null) throw new HTTPApiException(ExceptionType.Member_NotNullName);
         if(request.email()==null) throw new HTTPApiException(ExceptionType.Member_NotNullEmail);
-        if(memberservice.isExistEmail(request.email())) throw new HTTPApiException(ExceptionType.Member_OverLapEmail);
+        if(memberservice.isExistEmail(id, request.email())) throw new HTTPApiException(ExceptionType.Member_OverLapEmail);
         return memberservice.update(id, request);
     }
 

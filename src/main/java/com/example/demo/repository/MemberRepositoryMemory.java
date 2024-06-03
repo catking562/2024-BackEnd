@@ -51,7 +51,7 @@ public class MemberRepositoryMemory implements MemberRepository {
     }
 
     @Override
-    public Boolean isExistEmail(String email) {
+    public Boolean isExistEmail(Long notthis, String email) {
         return null;
     }
 }
