@@ -47,4 +47,9 @@ public class BoardRepositoryMemory implements BoardRepository {
     public Board update(Board board) {
         return boards.put(board.getId(), board);
     }
+
+    @Override
+    public Boolean isExistBoard(Long id) {
+        return null;
+    }
 }

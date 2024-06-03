@@ -1,6 +1,8 @@
 package com.example.demo.repository;
 
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
 
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -75,5 +77,21 @@ public class MemberRepositoryJdbc implements MemberRepository {
             DELETE FROM member
             WHERE id = ?
             """, id);
+    }
+
+    private static final RowMapper<Boolean> findIsResult = new RowMapper<Boolean>() {
+        @Override
+        public Boolean mapRow(ResultSet rs, int rowNum) throws SQLException {
+            return rs.next();
+        }
+    };
+
+    @Override
+    public Boolean isExistEmail(String email) {
+        return jdbcTemplate.queryForObject("""
+                SELECT id
+                FROM member
+                WHERE email = ? LIMIT 1
+                """, findIsResult, email);
     }
 }

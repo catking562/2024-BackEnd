@@ -49,4 +49,9 @@ public class MemberRepositoryMemory implements MemberRepository {
     public void deleteById(Long id) {
         members.remove(id);
     }
+
+    @Override
+    public Boolean isExistEmail(String email) {
+        return null;
+    }
 }

@@ -79,4 +79,8 @@ public class ArticleService {
     public void delete(Long id) {
         articleRepository.deleteById(id);
     }
+
+    public Boolean isExistBoard(Long boardid) {
+        return boardRepository.isExistBoard(boardid);
+    }
 }

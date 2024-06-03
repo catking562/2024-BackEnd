@@ -1,6 +1,8 @@
 package com.example.demo.repository;
 
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
 
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -68,5 +70,19 @@ public class BoardRepositoryJdbc implements BoardRepository {
             UPDATE board SET name = ? WHERE id = ?
             """, boardRowMapper, board.getName(), board.getId()
         );
+    }
+
+    private static final RowMapper<Boolean> findIsResult = new RowMapper<Boolean>() {
+        @Override
+        public Boolean mapRow(ResultSet rs, int rowNum) throws SQLException {
+            return rs.next();
+        }
+    };
+
+    @Override
+    public Boolean isExistBoard(Long id) {
+        return jdbcTemplate.queryForObject("""
+                SELECT id FROM board WHERE id = ?
+                """, findIsResult, id);
     }
 }

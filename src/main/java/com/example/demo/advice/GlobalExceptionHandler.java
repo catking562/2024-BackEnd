@@ -1,5 +1,6 @@
 package com.example.demo.advice;
 
+import com.example.demo.exception.HTTPApiException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
@@ -13,22 +14,12 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(EmptyResultDataAccessException.class)
     public ResponseEntity<String> handleEmptyResultDataAccessException(EmptyResultDataAccessException e) {
-        return new ResponseEntity<>(e.getMessage(), HttpStatusCode.valueOf(404));
+        return new ResponseEntity<>("해당 데이터를 찾을 수 없음.", HttpStatusCode.valueOf(404));
     }
 
-    @ExceptionHandler(SQLIntegrityConstraintViolationException.class)
-    public ResponseEntity<String> handleSQLIntergrityConstraintViolationException(SQLIntegrityConstraintViolationException e) {
-        int code = 400;
-        switch(e.getErrorCode()) {
-            case 1062:
-                code = 409;
-        }
-        return new ResponseEntity<>(e.getMessage(), HttpStatusCode.valueOf(code));
-    }
-
-    @ExceptionHandler(NullPointerException.class)
-    public ResponseEntity<String> handleNullPointerException(NullPointerException e) {
-        return new ResponseEntity<>(e.getMessage(), HttpStatusCode.valueOf(400));
+    @ExceptionHandler(HTTPApiException.class)
+    public ResponseEntity<String> handleHTTPApiException(HTTPApiException e) {
+        return new ResponseEntity<>(e.getMessage(), HttpStatusCode.valueOf(e.getHttpCode()));
     }
 
 }

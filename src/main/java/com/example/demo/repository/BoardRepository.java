@@ -15,4 +15,6 @@ public interface BoardRepository {
     void deleteById(Long id);
 
     Board update(Board board);
+
+    Boolean isExistBoard(Long id);
 }

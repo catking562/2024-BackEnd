@@ -53,4 +53,8 @@ public class MemberService {
         memberRepository.update(member);
         return MemberResponse.from(member);
     }
+
+    public boolean isExistEmail(String email) {
+        return memberRepository.isExistEmail(email);
+    }
 }
