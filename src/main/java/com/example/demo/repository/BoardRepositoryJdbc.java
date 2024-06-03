@@ -66,10 +66,11 @@ public class BoardRepositoryJdbc implements BoardRepository {
 
     @Override
     public Board update(Board board) {
-        return jdbcTemplate.queryForObject("""
+        jdbcTemplate.update("""
             UPDATE board SET name = ? WHERE id = ?
-            """, boardRowMapper, board.getName(), board.getId()
+            """, board.getName(), board.getId()
         );
+        return findById(board.getId());
     }
 
     private static final RowMapper<Boolean> findIsResult = new RowMapper<Boolean>() {
