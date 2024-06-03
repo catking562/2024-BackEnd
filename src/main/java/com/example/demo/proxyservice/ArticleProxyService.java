@@ -38,6 +38,7 @@ public class ArticleProxyService {
     }
 
     public ArticleResponse update(Long id, ArticleUpdateRequest request) throws HTTPApiException {
+        if(request.authorId()==null) throw new HTTPApiException(ExceptionType.Article_NotNullAuthorId);
         if(request.boardId()==null) throw new HTTPApiException(ExceptionType.Article_NotNullBoardId);
         if(request.title()==null) throw new HTTPApiException(ExceptionType.Article_NotNullTitle);
         if(request.description()==null) throw new HTTPApiException(ExceptionType.Article_NotNullDescription);

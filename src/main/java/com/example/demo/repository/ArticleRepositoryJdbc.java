@@ -87,9 +87,10 @@ public class ArticleRepositoryJdbc implements ArticleRepository {
     public Article update(Article article) {
         jdbcTemplate.update("""
                 UPDATE article
-                SET board_id = ?, title = ?, content = ?
+                SET author_id = ?, board_id = ?, title = ?, content = ?
                 WHERE id = ?
                 """,
+            article.getAuthorId(),
             article.getBoardId(),
             article.getTitle(),
             article.getContent(),
