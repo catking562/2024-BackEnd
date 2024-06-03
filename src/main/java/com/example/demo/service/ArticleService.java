@@ -68,7 +68,7 @@ public class ArticleService {
     @Transactional
     public ArticleResponse update(Long id, ArticleUpdateRequest request) {
         Article article = articleRepository.findById(id);
-        article.update(request.boardId(), request.title(), request.description());
+        article.update(request.authorId(), request.boardId(), request.title(), request.description());
         Article updated = articleRepository.update(article);
         Member member = memberRepository.findById(updated.getAuthorId());
         Board board = boardRepository.findById(article.getBoardId());

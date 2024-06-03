@@ -40,7 +40,8 @@ public class Article {
         this.modifiedAt = LocalDateTime.now();
     }
 
-    public void update(Long boardId, String title, String description) {
+    public void update(Long authorId, Long boardId, String title, String description) {
+        this.authorId = authorId;
         this.boardId = boardId;
         this.title = title;
         this.content = description;
