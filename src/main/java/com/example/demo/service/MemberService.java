@@ -57,4 +57,8 @@ public class MemberService {
     public boolean isExistEmail(Long notthis, String email) {
         return memberRepository.isExistEmail(notthis, email);
     }
+
+    public boolean isExistUser(Long userid) {
+        return memberRepository.isExistUser(userid);
+    }
 }

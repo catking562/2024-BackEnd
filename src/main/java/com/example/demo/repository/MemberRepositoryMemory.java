@@ -54,4 +54,9 @@ public class MemberRepositoryMemory implements MemberRepository {
     public Boolean isExistEmail(Long notthis, String email) {
         return null;
     }
+
+    @Override
+    public Boolean isExistUser(Long userid) {
+        return null;
+    }
 }

@@ -17,4 +17,6 @@ public interface MemberRepository {
     void deleteById(Long id);
 
     Boolean isExistEmail(Long notthis,String email);
+
+    Boolean isExistUser(Long userid);
 }

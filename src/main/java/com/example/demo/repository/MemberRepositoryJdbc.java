@@ -86,6 +86,8 @@ public class MemberRepositoryJdbc implements MemberRepository {
         }
     };
 
+
+
     @Override
     public Boolean isExistEmail(Long notthis, String email) {
         try{
@@ -94,6 +96,20 @@ public class MemberRepositoryJdbc implements MemberRepository {
                 FROM member
                 WHERE NOT id = ? AND email = ? LIMIT 1
                 """, findIsResult, notthis, email);
+            return true;
+        }catch(Exception e) {
+            return false;
+        }
+    }
+
+    @Override
+    public Boolean isExistUser(Long userid) {
+        try{
+            jdbcTemplate.queryForObject("""
+                    SELECT id
+                    FROM member
+                    WHERE id = ?
+                    """, findIsResult, userid);
             return true;
         }catch(Exception e) {
             return false;

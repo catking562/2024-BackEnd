@@ -83,4 +83,8 @@ public class ArticleService {
     public Boolean isExistBoard(Long boardid) {
         return boardRepository.isExistBoard(boardid);
     }
+
+    public Boolean isExistUser(Long userid) {
+        return memberRepository.isExistUser(userid);
+    }
 }

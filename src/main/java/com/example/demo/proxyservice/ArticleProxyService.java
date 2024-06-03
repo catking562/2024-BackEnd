@@ -42,6 +42,8 @@ public class ArticleProxyService {
         if(request.boardId()==null) throw new HTTPApiException(ExceptionType.Article_NotNullBoardId);
         if(request.title()==null) throw new HTTPApiException(ExceptionType.Article_NotNullTitle);
         if(request.description()==null) throw new HTTPApiException(ExceptionType.Article_NotNullDescription);
+        if(!articleservice.isExistBoard(request.boardId())) throw new HTTPApiException(ExceptionType.Board_IsNull);
+        if(!articleservice.isExistUser(request.authorId())) throw new HTTPApiException(ExceptionType.Member_IsNull);
         return articleservice.update(id, request);
     }
 

@@ -7,6 +7,7 @@ public enum ExceptionType {
     Member_NotNullPassWord(400, "'password' 값이 Null이 될 수 없습니다."),
     Member_OverLapEmail(409, "'email' 값은 중복 될 수 없습니다."),
     Member_CantDelete(400, "유저가 작성한 게시물이 존재하기 때문에 삭제 할 수 없습니다."),
+    Member_IsNull(400, "유저가 존재하지 않습니다."),
     Board_NotNullName(400, "'name' 값이 Null이 될 수 없습니다."),
     Board_CantDelete(400, "게시판에 작성된 게시물이 존재하기 때문에 삭제 할 수 없습니다."),
     Board_IsNull(400, "게시판이 존재하지 않습니다."),
