@@ -92,7 +92,7 @@ public class MemberRepositoryJdbc implements MemberRepository {
             jdbcTemplate.queryForObject("""
                 SELECT id
                 FROM member
-                WHERE id !=?, email = ? LIMIT 1
+                WHERE NOT id = ? AND email = ? LIMIT 1
                 """, findIsResult, notthis, email);
             return true;
         }catch(Exception e) {
