@@ -88,10 +88,15 @@ public class MemberRepositoryJdbc implements MemberRepository {
 
     @Override
     public Boolean isExistEmail(String email) {
-        return jdbcTemplate.queryForObject("""
+        try{
+            jdbcTemplate.queryForObject("""
                 SELECT id
                 FROM member
                 WHERE email = ? LIMIT 1
                 """, findIsResult, email);
+            return true;
+        }catch(Exception e) {
+            return false;
+        }
     }
 }

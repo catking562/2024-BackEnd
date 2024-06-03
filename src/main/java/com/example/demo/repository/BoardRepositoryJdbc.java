@@ -82,8 +82,13 @@ public class BoardRepositoryJdbc implements BoardRepository {
 
     @Override
     public Boolean isExistBoard(Long id) {
-        return jdbcTemplate.queryForObject("""
+        try{
+            jdbcTemplate.queryForObject("""
                 SELECT id FROM board WHERE id = ?
                 """, findIsResult, id);
+            return true;
+        }catch(Exception e) {
+            return false;
+        }
     }
 }
