@@ -34,8 +34,7 @@ public class MemberRepository extends com.example.demo.repository.Repository<Mem
 
     @Override
     public Member update(Member member) {
-        entitymanager.persist(member);
-        return findById(member.getId());
+        return entitymanager.merge(member);
     }
 
     @Override

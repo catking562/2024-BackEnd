@@ -18,7 +18,8 @@ public class ArticleRepository extends com.example.demo.repository.Repository<Ar
 
     @Override
     public List<Article> findAll() {
-        return entityManager.createQuery("SELECT p FROM Article p", Article.class).getResultList();
+        return entityManager.createQuery("SELECT p FROM Article p", Article.class)
+                .getResultList();
     }
 
     public List<Article> findAllByBoardId(Long boardId) {
@@ -48,8 +49,7 @@ public class ArticleRepository extends com.example.demo.repository.Repository<Ar
 
     @Override
     public Article update(Article article) {
-        entityManager.persist(article);
-        return findById(article.getId());
+        return entityManager.merge(article);
     }
 
     @Override

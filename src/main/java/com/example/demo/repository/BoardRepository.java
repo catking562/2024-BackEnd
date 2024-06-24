@@ -39,8 +39,7 @@ public class BoardRepository extends com.example.demo.repository.Repository<Boar
 
     @Override
     public Board update(Board board) {
-        entityManager.persist(board);
-        return findById(board.getId());
+        return entityManager.merge(board);
     }
 
     @Override
