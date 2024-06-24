@@ -2,9 +2,9 @@ package com.example.demo.service;
 
 import java.util.List;
 
-import com.example.demo.repository.ArticleRepositoryJdbc;
-import com.example.demo.repository.BoardRepositoryJdbc;
-import com.example.demo.repository.MemberRepositoryJdbc;
+import com.example.demo.repository.ArticleRepository;
+import com.example.demo.repository.BoardRepository;
+import com.example.demo.repository.MemberRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,14 +19,14 @@ import com.example.demo.entity.Member;
 @Transactional(readOnly = true)
 public class ArticleService {
 
-    private final ArticleRepositoryJdbc articleRepository;
-    private final MemberRepositoryJdbc memberRepository;
-    private final BoardRepositoryJdbc boardRepository;
+    private final ArticleRepository articleRepository;
+    private final MemberRepository memberRepository;
+    private final BoardRepository boardRepository;
 
     public ArticleService(
-        ArticleRepositoryJdbc articleRepository,
-        MemberRepositoryJdbc memberRepository,
-        BoardRepositoryJdbc boardRepository
+        ArticleRepository articleRepository,
+        MemberRepository memberRepository,
+        BoardRepository boardRepository
     ) {
         this.articleRepository = articleRepository;
         this.memberRepository = memberRepository;

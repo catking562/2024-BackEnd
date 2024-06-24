@@ -1,26 +1,18 @@
 package com.example.demo.repository;
 
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.List;
 
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
-import org.springframework.jdbc.support.GeneratedKeyHolder;
-import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 import com.example.demo.entity.Member;
 
 @Repository
-public class MemberRepositoryJdbc extends com.example.demo.repository.Repository<Member> {
+public class MemberRepository extends com.example.demo.repository.Repository<Member> {
 
     private final EntityManager entitymanager;
 
-    public MemberRepositoryJdbc(EntityManager entitymanager) {
+    public MemberRepository(EntityManager entitymanager) {
         this.entitymanager = entitymanager;
     }
 

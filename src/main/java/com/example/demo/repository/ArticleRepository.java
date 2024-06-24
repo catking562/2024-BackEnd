@@ -1,24 +1,18 @@
 package com.example.demo.repository;
 
-import java.sql.PreparedStatement;
 import java.util.List;
 
-import com.example.demo.entity.Board;
 import jakarta.persistence.EntityManager;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
-import org.springframework.jdbc.support.GeneratedKeyHolder;
-import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 import com.example.demo.entity.Article;
 
 @Repository
-public class ArticleRepositoryJdbc extends com.example.demo.repository.Repository<Article> {
+public class ArticleRepository extends com.example.demo.repository.Repository<Article> {
 
     private final EntityManager entityManager;
 
-    public ArticleRepositoryJdbc(EntityManager jdbcTemplate) {
+    public ArticleRepository(EntityManager jdbcTemplate) {
         this.entityManager = jdbcTemplate;
     }
 

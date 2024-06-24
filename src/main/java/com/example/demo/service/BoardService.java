@@ -2,7 +2,7 @@ package com.example.demo.service;
 
 import java.util.List;
 
-import com.example.demo.repository.BoardRepositoryJdbc;
+import com.example.demo.repository.BoardRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,9 +15,9 @@ import com.example.demo.entity.Board;
 @Transactional(readOnly = true)
 public class BoardService {
 
-    private final BoardRepositoryJdbc boardRepository;
+    private final BoardRepository boardRepository;
 
-    public BoardService(BoardRepositoryJdbc boardRepository) {
+    public BoardService(BoardRepository boardRepository) {
         this.boardRepository = boardRepository;
     }
 

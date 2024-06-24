@@ -2,7 +2,7 @@ package com.example.demo.service;
 
 import java.util.List;
 
-import com.example.demo.repository.MemberRepositoryJdbc;
+import com.example.demo.repository.MemberRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,9 +15,9 @@ import com.example.demo.entity.Member;
 //@Transactional(readOnly = true)
 public class MemberService {
 
-    private final MemberRepositoryJdbc memberRepository;
+    private final MemberRepository memberRepository;
 
-    public MemberService(MemberRepositoryJdbc memberRepository) {
+    public MemberService(MemberRepository memberRepository) {
         this.memberRepository = memberRepository;
     }
 
