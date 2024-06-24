@@ -3,7 +3,6 @@ package com.example.demo.proxyservice;
 import com.example.demo.controller.dto.request.ArticleCreateRequest;
 import com.example.demo.controller.dto.request.ArticleUpdateRequest;
 import com.example.demo.controller.dto.response.ArticleResponse;
-import com.example.demo.domain.Article;
 import com.example.demo.exception.ExceptionType;
 import com.example.demo.exception.HTTPApiException;
 import com.example.demo.service.ArticleService;
@@ -21,8 +20,8 @@ public class ArticleProxyService {
     }
 
     public List<ArticleResponse> getByBoardId(Long boardId) throws HTTPApiException {
-        if(articleservice.isExistBoard(boardId)) throw new HTTPApiException(ExceptionType.Board_IsNull);
-        return getByBoardId(boardId);
+        if(!articleservice.isExistBoard(boardId)) throw new HTTPApiException(ExceptionType.Board_IsNull);
+        return articleservice.getByBoardId(boardId);
     }
 
     public ArticleResponse getById(Long id) {

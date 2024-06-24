@@ -3,107 +3,63 @@ package com.example.demo.repository;
 import java.sql.PreparedStatement;
 import java.util.List;
 
+import com.example.demo.entity.Board;
+import jakarta.persistence.EntityManager;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
-import com.example.demo.domain.Article;
+import com.example.demo.entity.Article;
 
 @Repository
-public class ArticleRepositoryJdbc implements ArticleRepository {
+public class ArticleRepositoryJdbc extends com.example.demo.repository.Repository<Article> {
 
-    private final JdbcTemplate jdbcTemplate;
+    private final EntityManager entityManager;
 
-    public ArticleRepositoryJdbc(JdbcTemplate jdbcTemplate) {
-        this.jdbcTemplate = jdbcTemplate;
+    public ArticleRepositoryJdbc(EntityManager jdbcTemplate) {
+        this.entityManager = jdbcTemplate;
     }
-
-    private static final RowMapper<Article> articleRowMapper = (rs, rowNum) -> new Article(
-        rs.getLong("id"),
-        rs.getLong("author_id"),
-        rs.getLong("board_id"),
-        rs.getString("title"),
-        rs.getString("content"),
-        rs.getTimestamp("created_date").toLocalDateTime(),
-        rs.getTimestamp("modified_date").toLocalDateTime()
-    );
 
     @Override
     public List<Article> findAll() {
-        return jdbcTemplate.query("""
-            SELECT id,  board_id,  author_id,  title,  content,  created_date,  modified_date
-            FROM article
-            """, articleRowMapper);
+        return entityManager.createQuery("SELECT p FROM Article p", Article.class).getResultList();
     }
 
-    @Override
     public List<Article> findAllByBoardId(Long boardId) {
-        return jdbcTemplate.query("""
-            SELECT id,  board_id,  author_id,  title,  content,  created_date,  modified_date
-            FROM article
-            WHERE board_id = ?
-            """, articleRowMapper, boardId);
+        return entityManager.createQuery(
+                new StringBuilder("SELECT p FROM Article p WHERE p.boardId = ")
+                        .append(boardId).toString(), Article.class)
+                .getResultList();
     }
 
-    @Override
     public List<Article> findAllByMemberId(Long memberId) {
-        return jdbcTemplate.query("""
-            SELECT id,  board_id,  author_id,  title,  content,  created_date,  modified_date
-            FROM article
-            WHERE author_id = ?
-            """, articleRowMapper, memberId);
+        return entityManager.createQuery(
+                        new StringBuilder("SELECT p FROM Article p WHERE p.authorId = ")
+                                .append(memberId).toString(), Article.class)
+                .getResultList();
     }
 
     @Override
     public Article findById(Long id) {
-        return jdbcTemplate.queryForObject("""
-            SELECT id,  board_id,  author_id,  title,  content,  created_date,  modified_date
-            FROM article
-            WHERE id = ?
-            """, articleRowMapper, id);
+        return entityManager.find(Article.class, id);
     }
 
     @Override
     public Article insert(Article article) {
-        KeyHolder keyHolder = new GeneratedKeyHolder();
-        jdbcTemplate.update(con -> {
-            PreparedStatement ps = con.prepareStatement("""
-                    INSERT INTO article (board_id, author_id, title, content)
-                    VALUES (?, ?, ?, ?)
-                    """,
-                new String[]{"id"});
-            ps.setLong(1, article.getBoardId());
-            ps.setLong(2, article.getAuthorId());
-            ps.setString(3, article.getTitle());
-            ps.setString(4, article.getContent());
-            return ps;
-        }, keyHolder);
-        return findById(keyHolder.getKey().longValue());
+        entityManager.persist(article);
+        return findById(article.getId());
     }
 
     @Override
     public Article update(Article article) {
-        jdbcTemplate.update("""
-                UPDATE article
-                SET author_id = ?, board_id = ?, title = ?, content = ?
-                WHERE id = ?
-                """,
-            article.getAuthorId(),
-            article.getBoardId(),
-            article.getTitle(),
-            article.getContent(),
-            article.getId()
-        );
+        entityManager.persist(article);
         return findById(article.getId());
     }
 
     @Override
     public void deleteById(Long id) {
-        jdbcTemplate.update("""
-            DELETE FROM article
-            WHERE id = ?
-            """, id);
+        entityManager.remove(findById(id));
     }
 }

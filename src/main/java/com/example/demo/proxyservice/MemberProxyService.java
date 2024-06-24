@@ -3,13 +3,11 @@ package com.example.demo.proxyservice;
 import com.example.demo.controller.dto.request.MemberCreateRequest;
 import com.example.demo.controller.dto.request.MemberUpdateRequest;
 import com.example.demo.controller.dto.response.MemberResponse;
-import com.example.demo.domain.Member;
 import com.example.demo.exception.ExceptionType;
 import com.example.demo.exception.HTTPApiException;
 import com.example.demo.service.MemberService;
 import org.springframework.stereotype.Service;
 
-import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.List;
 
 @Service
@@ -33,6 +31,7 @@ public class MemberProxyService {
         if(request.name()==null) throw new HTTPApiException(ExceptionType.Member_NotNullName);
         if(request.email()==null) throw new HTTPApiException(ExceptionType.Member_NotNullEmail);
         if(request.password()==null) throw new HTTPApiException(ExceptionType.Member_NotNullPassWord);
+        if(memberservice.isExistEmail(0L, request.email())) throw new HTTPApiException(ExceptionType.Member_OverLapEmail);
         return memberservice.create(request);
     }
 

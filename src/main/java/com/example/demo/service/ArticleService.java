@@ -2,31 +2,31 @@ package com.example.demo.service;
 
 import java.util.List;
 
+import com.example.demo.repository.ArticleRepositoryJdbc;
+import com.example.demo.repository.BoardRepositoryJdbc;
+import com.example.demo.repository.MemberRepositoryJdbc;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.demo.controller.dto.request.ArticleCreateRequest;
 import com.example.demo.controller.dto.response.ArticleResponse;
 import com.example.demo.controller.dto.request.ArticleUpdateRequest;
-import com.example.demo.domain.Article;
-import com.example.demo.domain.Board;
-import com.example.demo.domain.Member;
-import com.example.demo.repository.ArticleRepository;
-import com.example.demo.repository.BoardRepository;
-import com.example.demo.repository.MemberRepository;
+import com.example.demo.entity.Article;
+import com.example.demo.entity.Board;
+import com.example.demo.entity.Member;
 
 @Service
 @Transactional(readOnly = true)
 public class ArticleService {
 
-    private final ArticleRepository articleRepository;
-    private final MemberRepository memberRepository;
-    private final BoardRepository boardRepository;
+    private final ArticleRepositoryJdbc articleRepository;
+    private final MemberRepositoryJdbc memberRepository;
+    private final BoardRepositoryJdbc boardRepository;
 
     public ArticleService(
-        ArticleRepository articleRepository,
-        MemberRepository memberRepository,
-        BoardRepository boardRepository
+        ArticleRepositoryJdbc articleRepository,
+        MemberRepositoryJdbc memberRepository,
+        BoardRepositoryJdbc boardRepository
     ) {
         this.articleRepository = articleRepository;
         this.memberRepository = memberRepository;
@@ -81,10 +81,10 @@ public class ArticleService {
     }
 
     public Boolean isExistBoard(Long boardid) {
-        return boardRepository.isExistBoard(boardid);
+        return boardRepository.isExist(boardid);
     }
 
     public Boolean isExistUser(Long userid) {
-        return memberRepository.isExistUser(userid);
+        return memberRepository.isExist(userid);
     }
 }

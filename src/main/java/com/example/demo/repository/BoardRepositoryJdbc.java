@@ -5,87 +5,57 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
+import jakarta.persistence.EntityManager;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
-import com.example.demo.domain.Board;
+import com.example.demo.entity.Board;
 
 @Repository
-public class BoardRepositoryJdbc implements BoardRepository {
+public class BoardRepositoryJdbc extends com.example.demo.repository.Repository<Board> {
 
-    private final JdbcTemplate jdbcTemplate;
+    private final EntityManager entityManager;
 
-    public BoardRepositoryJdbc(JdbcTemplate jdbcTemplate) {
-        this.jdbcTemplate = jdbcTemplate;
+    public BoardRepositoryJdbc(EntityManager jdbcTemplate) {
+        this.entityManager = jdbcTemplate;
     }
-
-    private static final RowMapper<Board> boardRowMapper = (rs, rowNum) -> new Board(
-        rs.getLong("id"),
-        rs.getString("name")
-    );
 
     @Override
     public List<Board> findAll() {
-        return jdbcTemplate.query("""
-            SELECT id, name
-            FROM board
-            """, boardRowMapper);
+        return entityManager.createQuery("SELECT p FROM Board p", Board.class).getResultList();
     }
 
     @Override
     public Board findById(Long id) {
-        return jdbcTemplate.queryForObject("""
-            SELECT id, name
-            FROM board
-            WHERE id = ?
-            """, boardRowMapper, id);
+        return entityManager.find(Board.class, id);
     }
 
     @Override
     public Board insert(Board board) {
-        KeyHolder keyHolder = new GeneratedKeyHolder();
-        jdbcTemplate.update(con -> {
-            PreparedStatement ps = con.prepareStatement("""
-                INSERT INTO board (name) VALUES (?)
-                """, new String[]{"id"});
-            ps.setString(1, board.getName());
-            return ps;
-        }, keyHolder);
-        return findById(keyHolder.getKey().longValue());
+        entityManager.persist(board);
+        return findById(board.getId());
     }
 
     @Override
     public void deleteById(Long id) {
-        jdbcTemplate.update("""
-            DELETE FROM board WHERE id = ?
-            """, id);
+        entityManager.remove(findById(id));
     }
 
     @Override
     public Board update(Board board) {
-        jdbcTemplate.update("""
-            UPDATE board SET name = ? WHERE id = ?
-            """, board.getName(), board.getId()
-        );
+        entityManager.persist(board);
         return findById(board.getId());
     }
 
-    private static final RowMapper<Boolean> findIsResult = new RowMapper<Boolean>() {
-        @Override
-        public Boolean mapRow(ResultSet rs, int rowNum) throws SQLException {
-            return rs.next();
-        }
-    };
-
     @Override
-    public Boolean isExistBoard(Long id) {
+    public boolean isExist(Long id) {
         try{
-            jdbcTemplate.queryForObject("""
-                SELECT id FROM board WHERE id = ?
-                """, findIsResult, id);
+            entityManager.createQuery(new StringBuilder("SELECT p FROM Board p WHERE p.id = ")
+                            .append(id)
+                            .toString(), Board.class);
             return true;
         }catch(Exception e) {
             return false;

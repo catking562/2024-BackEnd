@@ -1,37 +1,45 @@
-package com.example.demo.domain;
+package com.example.demo.entity;
+
+import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
 
+@Entity
+@Table(name = "article")
 public class Article {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(name = "author_id")
     private Long authorId;
+    @Column(name = "board_id")
     private Long boardId;
     private String title;
     private String content;
+    @Column(name = "created_date")
     private LocalDateTime createdAt;
+    @Column(name = "modified_date")
     private LocalDateTime modifiedAt;
+
+    public Article() {
+    }
 
     public Article(
         Long id,
         Long authorId,
         Long boardId,
         String title,
-        String content,
-        LocalDateTime createdAt,
-        LocalDateTime modifiedAt
+        String content
     ) {
         this.id = id;
         this.authorId = authorId;
         this.boardId = boardId;
         this.title = title;
         this.content = content;
-        this.createdAt = createdAt;
-        this.modifiedAt = modifiedAt;
     }
 
     public Article(Long authorId, Long boardId, String title, String content) {
-        this.id = null;
         this.authorId = authorId;
         this.boardId = boardId;
         this.title = title;
@@ -46,10 +54,6 @@ public class Article {
         this.title = title;
         this.content = description;
         this.modifiedAt = LocalDateTime.now();
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public void setModifiedAt(LocalDateTime modifiedAt) {

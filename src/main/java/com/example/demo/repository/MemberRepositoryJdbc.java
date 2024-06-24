@@ -5,97 +5,57 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
-import com.example.demo.domain.Member;
+import com.example.demo.entity.Member;
 
 @Repository
-public class MemberRepositoryJdbc implements MemberRepository {
+public class MemberRepositoryJdbc extends com.example.demo.repository.Repository<Member> {
 
-    private final JdbcTemplate jdbcTemplate;
+    private final EntityManager entitymanager;
 
-    public MemberRepositoryJdbc(JdbcTemplate jdbcTemplate) {
-        this.jdbcTemplate = jdbcTemplate;
+    public MemberRepositoryJdbc(EntityManager entitymanager) {
+        this.entitymanager = entitymanager;
     }
-
-    private static final RowMapper<Member> memberRowMapper = (rs, rowNum) -> new Member(
-        rs.getLong("id"),
-        rs.getString("name"),
-        rs.getString("email"),
-        rs.getString("password")
-    );
 
     @Override
     public List<Member> findAll() {
-        return jdbcTemplate.query("""
-            SELECT id, name, email, password
-            FROM member
-            """, memberRowMapper);
+        return entitymanager.createQuery("SELECT p FROM Member p", Member.class).getResultList();
     }
 
     @Override
     public Member findById(Long id) {
-        return jdbcTemplate.queryForObject("""
-            SELECT id, name, email, password
-            FROM member
-            WHERE id = ?
-            """, memberRowMapper, id);
+        return entitymanager.find(Member.class, id);
     }
 
     @Override
     public Member insert(Member member) {
-        KeyHolder keyHolder = new GeneratedKeyHolder();
-        jdbcTemplate.update(con -> {
-            PreparedStatement ps = con.prepareStatement("""
-                INSERT INTO member (name, email, password) VALUES (?, ?, ?)
-                """, new String[]{"id"});
-            ps.setString(1, member.getName());
-            ps.setString(2, member.getEmail());
-            ps.setString(3, member.getPassword());
-            return ps;
-        }, keyHolder);
-        return findById(keyHolder.getKey().longValue());
+        entitymanager.persist(member);
+        return findById(member.getId());
     }
 
     @Override
     public Member update(Member member) {
-        jdbcTemplate.update("""
-            UPDATE member
-            SET name = ?, email = ?
-            WHERE id = ?
-            """, member.getName(), member.getEmail(), member.getId());
+        entitymanager.persist(member);
         return findById(member.getId());
     }
 
     @Override
     public void deleteById(Long id) {
-        jdbcTemplate.update("""
-            DELETE FROM member
-            WHERE id = ?
-            """, id);
+        entitymanager.remove(findById(id));
     }
 
-    private static final RowMapper<Boolean> findIsResult = new RowMapper<Boolean>() {
-        @Override
-        public Boolean mapRow(ResultSet rs, int rowNum) throws SQLException {
-            return rs.next();
-        }
-    };
-
-
-
-    @Override
     public Boolean isExistEmail(Long notthis, String email) {
         try{
-            jdbcTemplate.queryForObject("""
-                SELECT id
-                FROM member
-                WHERE NOT id = ? AND email = ? LIMIT 1
-                """, findIsResult, notthis, email);
+            entitymanager.createQuery(new StringBuilder("SELECT p FROM Member p WHERE NOT p.id = ")
+                            .append(notthis).append(" AND p.email = '").append(email).append("'")
+                            .toString(), Member.class).getSingleResult();
             return true;
         }catch(Exception e) {
             return false;
@@ -103,13 +63,11 @@ public class MemberRepositoryJdbc implements MemberRepository {
     }
 
     @Override
-    public Boolean isExistUser(Long userid) {
+    public boolean isExist(Long userid) {
         try{
-            jdbcTemplate.queryForObject("""
-                    SELECT id
-                    FROM member
-                    WHERE id = ?
-                    """, findIsResult, userid);
+            entitymanager.createQuery(new StringBuilder("SELECT p FROM Member p WHERE p.id = ")
+                            .append(userid)
+                            .toString(), Member.class);
             return true;
         }catch(Exception e) {
             return false;

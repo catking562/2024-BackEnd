@@ -2,22 +2,22 @@ package com.example.demo.service;
 
 import java.util.List;
 
+import com.example.demo.repository.MemberRepositoryJdbc;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.demo.controller.dto.request.MemberCreateRequest;
 import com.example.demo.controller.dto.request.MemberUpdateRequest;
 import com.example.demo.controller.dto.response.MemberResponse;
-import com.example.demo.domain.Member;
-import com.example.demo.repository.MemberRepository;
+import com.example.demo.entity.Member;
 
 @Service
-@Transactional(readOnly = true)
+//@Transactional(readOnly = true)
 public class MemberService {
 
-    private final MemberRepository memberRepository;
+    private final MemberRepositoryJdbc memberRepository;
 
-    public MemberService(MemberRepository memberRepository) {
+    public MemberService(MemberRepositoryJdbc memberRepository) {
         this.memberRepository = memberRepository;
     }
 
@@ -55,10 +55,11 @@ public class MemberService {
     }
 
     public boolean isExistEmail(Long notthis, String email) {
+        System.out.println("a");
         return memberRepository.isExistEmail(notthis, email);
     }
 
     public boolean isExistUser(Long userid) {
-        return memberRepository.isExistUser(userid);
+        return memberRepository.isExist(userid);
     }
 }
