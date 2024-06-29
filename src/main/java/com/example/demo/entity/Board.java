@@ -2,6 +2,9 @@ package com.example.demo.entity;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Table(name = "board")
 public class Board {
@@ -10,6 +13,8 @@ public class Board {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
+    @OneToMany(mappedBy = "board")
+    private List<Article> articles = new ArrayList<>();
 
     public Board() {
 
@@ -35,4 +40,9 @@ public class Board {
     public void update(String name) {
         this.name = name;
     }
+
+    public List<Article> getArticles() {
+        return articles;
+    }
+
 }

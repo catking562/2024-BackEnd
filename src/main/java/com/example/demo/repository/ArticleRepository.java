@@ -2,6 +2,8 @@ package com.example.demo.repository;
 
 import java.util.List;
 
+import com.example.demo.entity.Board;
+import com.example.demo.entity.Member;
 import jakarta.persistence.EntityManager;
 import org.springframework.stereotype.Repository;
 
@@ -16,24 +18,18 @@ public class ArticleRepository extends com.example.demo.repository.Repository<Ar
         this.entityManager = jdbcTemplate;
     }
 
-    @Override
+    /*@Override
     public List<Article> findAll() {
         return entityManager.createQuery("SELECT p FROM Article p", Article.class)
                 .getResultList();
-    }
+    }*/
 
     public List<Article> findAllByBoardId(Long boardId) {
-        return entityManager.createQuery(
-                new StringBuilder("SELECT p FROM Article p WHERE p.boardId = ")
-                        .append(boardId).toString(), Article.class)
-                .getResultList();
+        return entityManager.find(Board.class, boardId).getArticles();
     }
 
     public List<Article> findAllByMemberId(Long memberId) {
-        return entityManager.createQuery(
-                        new StringBuilder("SELECT p FROM Article p WHERE p.authorId = ")
-                                .append(memberId).toString(), Article.class)
-                .getResultList();
+        return entityManager.find(Member.class, memberId).getArticles();
     }
 
     @Override
