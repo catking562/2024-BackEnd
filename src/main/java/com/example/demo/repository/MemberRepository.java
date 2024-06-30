@@ -3,65 +3,40 @@ package com.example.demo.repository;
 import java.util.List;
 
 import jakarta.persistence.EntityManager;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import com.example.demo.entity.Member;
 
 @Repository
-public class MemberRepository extends com.example.demo.repository.Repository<Member> {
+public interface MemberRepository extends JpaRepository<Member, Long> {
 
-    private final EntityManager entitymanager;
-
-    public MemberRepository(EntityManager entitymanager) {
-        this.entitymanager = entitymanager;
+    default Member insert(Member member) {
+        return save(member);
     }
 
-    @Override
-    public List<Member> findAll() {
-        return entitymanager.createQuery("SELECT p FROM Member p", Member.class).getResultList();
+    default Member update(Member member) {
+        return save(member);
     }
 
-    @Override
-    public Member findById(Long id) {
-        return entitymanager.find(Member.class, id);
+    default void deleteById(Long id) {
+        delete(findById(id).get());
     }
 
-    @Override
-    public Member insert(Member member) {
-        entitymanager.persist(member);
-        return findById(member.getId());
-    }
+    @Query("SELECT p FROM Member p WHERE NOT p.id = :notthis AND p.email = :email")
+    Member findByEmail(Long notthis, String email);
 
-    @Override
-    public Member update(Member member) {
-        return entitymanager.merge(member);
-    }
-
-    @Override
-    public void deleteById(Long id) {
-        entitymanager.remove(findById(id));
-    }
-
-    public Boolean isExistEmail(Long notthis, String email) {
+    default Boolean isExistEmail(Long notthis, String email) {
         try{
-            entitymanager.createQuery(new StringBuilder("SELECT p FROM Member p WHERE NOT p.id = ")
-                            .append(notthis).append(" AND p.email = '").append(email).append("'")
-                            .toString(), Member.class).getSingleResult();
+            findByEmail(notthis, email);
             return true;
         }catch(Exception e) {
             return false;
         }
     }
 
-    @Override
-    public boolean isExist(Long userid) {
-        try{
-            entitymanager.createQuery(new StringBuilder("SELECT p FROM Member p WHERE p.id = ")
-                            .append(userid)
-                            .toString(), Member.class);
-            return true;
-        }catch(Exception e) {
-            return false;
-        }
+    default boolean isExist(Long userid) {
+        return findById(userid).isPresent();
     }
 }

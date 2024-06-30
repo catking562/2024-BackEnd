@@ -3,54 +3,28 @@ package com.example.demo.repository;
 import java.util.List;
 
 import jakarta.persistence.EntityManager;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import com.example.demo.entity.Board;
 
 @Repository
-public class BoardRepository extends com.example.demo.repository.Repository<Board> {
+public interface BoardRepository extends JpaRepository<Board, Long> {
 
-    private final EntityManager entityManager;
-
-    public BoardRepository(EntityManager jdbcTemplate) {
-        this.entityManager = jdbcTemplate;
+    default Board insert(Board board) {
+        return save(board);
     }
 
-    @Override
-    public List<Board> findAll() {
-        return entityManager.createQuery("SELECT p FROM Board p", Board.class).getResultList();
+    default void deleteById(Long id) {
+        delete(findById(id).get());
     }
 
-    @Override
-    public Board findById(Long id) {
-        return entityManager.find(Board.class, id);
+    default Board update(Board board) {
+        return save(board);
     }
 
-    @Override
-    public Board insert(Board board) {
-        entityManager.persist(board);
-        return findById(board.getId());
-    }
-
-    @Override
-    public void deleteById(Long id) {
-        entityManager.remove(findById(id));
-    }
-
-    @Override
-    public Board update(Board board) {
-        return entityManager.merge(board);
-    }
-
-    @Override
-    public boolean isExist(Long id) {
-        try{
-            entityManager.createQuery(new StringBuilder("SELECT p FROM Board p WHERE p.id = ")
-                            .append(id)
-                            .toString(), Board.class);
-            return true;
-        }catch(Exception e) {
-            return false;
-        }
+    default boolean isExist(Long id) {
+        return findById(id).isPresent();
     }
 }

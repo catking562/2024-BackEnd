@@ -34,12 +34,12 @@ public class ArticleService {
     }
 
     public ArticleResponse getById(Long id) {
-        Article article = articleRepository.findById(id);
+        Article article = articleRepository.findById(id).get();
         return ArticleResponse.of(article);
     }
 
     public List<ArticleResponse> getByBoardId(Long boardId) {
-        List<Article> articles = articleRepository.findAllByBoardId(boardId);
+        List<Article> articles = boardRepository.findById(boardId).get().getArticles();
         return articles.stream()
             .map(ArticleResponse::of)//인텔리제이가 이렇게 바꿔주더라구요.
             .toList();
@@ -48,8 +48,8 @@ public class ArticleService {
     @Transactional
     public ArticleResponse create(ArticleCreateRequest request) {
         Article article = new Article(
-            memberRepository.findById(request.authorId()),
-            boardRepository.findById(request.boardId()),
+            memberRepository.findById(request.authorId()).get(),
+            boardRepository.findById(request.boardId()).get(),
             request.title(),
             request.description()
         );
@@ -59,9 +59,9 @@ public class ArticleService {
 
     @Transactional
     public ArticleResponse update(Long id, ArticleUpdateRequest request) {
-        Member member = memberRepository.findById(request.authorId());
-        Board board = boardRepository.findById(request.boardId());
-        Article article = articleRepository.findById(id);
+        Member member = memberRepository.findById(request.authorId()).get();
+        Board board = boardRepository.findById(request.boardId()).get();
+        Article article = articleRepository.findById(id).get();
         article.update(member, board, request.title(), request.description());
 
         Article updated = articleRepository.update(article);

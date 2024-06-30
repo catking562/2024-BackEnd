@@ -5,51 +5,23 @@ import java.util.List;
 import com.example.demo.entity.Board;
 import com.example.demo.entity.Member;
 import jakarta.persistence.EntityManager;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import com.example.demo.entity.Article;
 
 @Repository
-public class ArticleRepository extends com.example.demo.repository.Repository<Article> {
+public interface ArticleRepository extends JpaRepository<Article, Long> {
 
-    private final EntityManager entityManager;
-
-    public ArticleRepository(EntityManager jdbcTemplate) {
-        this.entityManager = jdbcTemplate;
+    default Article insert(Article article) {
+        return save(article);
     }
 
-    /*@Override
-    public List<Article> findAll() {
-        return entityManager.createQuery("SELECT p FROM Article p", Article.class)
-                .getResultList();
-    }*/
-
-    public List<Article> findAllByBoardId(Long boardId) {
-        return entityManager.find(Board.class, boardId).getArticles();
+    default Article update(Article article) {
+        return save(article);
     }
 
-    public List<Article> findAllByMemberId(Long memberId) {
-        return entityManager.find(Member.class, memberId).getArticles();
-    }
-
-    @Override
-    public Article findById(Long id) {
-        return entityManager.find(Article.class, id);
-    }
-
-    @Override
-    public Article insert(Article article) {
-        entityManager.persist(article);
-        return findById(article.getId());
-    }
-
-    @Override
-    public Article update(Article article) {
-        return entityManager.merge(article);
-    }
-
-    @Override
-    public void deleteById(Long id) {
-        entityManager.remove(findById(id));
+    default void deleteById(Long id) {
+        delete(findById(id).get());
     }
 }

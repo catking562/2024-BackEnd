@@ -28,7 +28,7 @@ public class BoardService {
     }
 
     public BoardResponse getBoardById(Long id) {
-        Board board = boardRepository.findById(id);
+        Board board = boardRepository.findById(id).get();
         return BoardResponse.from(board);
     }
 
@@ -46,7 +46,7 @@ public class BoardService {
 
     @Transactional
     public BoardResponse update(Long id, BoardUpdateRequest request) {
-        Board board = boardRepository.findById(id);
+        Board board = boardRepository.findById(id).get();
         board.update(request.name());
         Board updated = boardRepository.update(board);
         return BoardResponse.from(updated);

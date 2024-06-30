@@ -22,7 +22,7 @@ public class MemberService {
     }
 
     public MemberResponse getById(Long id) {
-        Member member = memberRepository.findById(id);
+        Member member = memberRepository.findById(id).get();
         return MemberResponse.from(member);
     }
 
@@ -48,7 +48,7 @@ public class MemberService {
 
     @Transactional
     public MemberResponse update(Long id, MemberUpdateRequest request) {
-        Member member = memberRepository.findById(id);
+        Member member = memberRepository.findById(id).get();
         member.update(request.name(), request.email());
         memberRepository.update(member);
         return MemberResponse.from(member);
