@@ -65,7 +65,7 @@ public class ArticleController {
     @DeleteMapping("/articles/{id}")
     public ResponseEntity<Void> updateArticle(
         @PathVariable Long id
-    ) {
+    ) throws HTTPApiException {
         articleService.delete(id);
         return ResponseEntity.noContent().build();
     }

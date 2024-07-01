@@ -24,4 +24,8 @@ public interface ArticleRepository extends JpaRepository<Article, Long> {
     default void deleteById(Long id) {
         delete(findById(id).get());
     }
+
+    default boolean isExist(Long id) {
+        return findById(id).isPresent();
+    }
 }

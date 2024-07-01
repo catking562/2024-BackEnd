@@ -15,6 +15,7 @@ public enum ExceptionType {
     Article_NotNullBoardId(400, "'boardId' 값이 Null이 될 수 없습니다."),
     Article_NotNullTitle(400, "'title' 값이 Null이 될 수 없습니다."),
     Article_NotNullDescription(400, "'description' 값이 Null이 될 수 없습니다."),
+    Article_IsNull(400, "게시물이 존재하지 않습니다.")
     ;
 
     private final int httpstate;

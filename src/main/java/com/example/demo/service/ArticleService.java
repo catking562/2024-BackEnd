@@ -57,6 +57,10 @@ public class ArticleService {
         return ArticleResponse.of(saved);
     }
 
+    public boolean isExist(Long id) {
+        return articleRepository.isExist(id);
+    }
+
     @Transactional
     public ArticleResponse update(Long id, ArticleUpdateRequest request) {
         Member member = memberRepository.findById(request.authorId()).get();

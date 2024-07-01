@@ -38,6 +38,7 @@ public class BoardProxyService {
     }
 
     public void deleteBoard(Long id) throws HTTPApiException {
+        if(!boardservice.isExist(id)) throw new HTTPApiException(ExceptionType.Board_IsNull);
         try{
             boardservice.deleteBoard(id);
         }catch(Exception e) {

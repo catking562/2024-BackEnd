@@ -55,7 +55,6 @@ public class MemberService {
     }
 
     public boolean isExistEmail(Long notthis, String email) {
-        System.out.println("a");
         return memberRepository.isExistEmail(notthis, email);
     }
 

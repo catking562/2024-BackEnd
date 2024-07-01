@@ -51,4 +51,8 @@ public class BoardService {
         Board updated = boardRepository.update(board);
         return BoardResponse.from(updated);
     }
+
+    public boolean isExist(Long id) {
+        return boardRepository.isExist(id);
+    }
 }

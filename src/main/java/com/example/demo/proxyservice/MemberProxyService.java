@@ -43,6 +43,7 @@ public class MemberProxyService {
     }
 
     public void delete(Long id) throws HTTPApiException {
+        if(!memberservice.isExistUser(id)) throw new HTTPApiException(ExceptionType.Member_IsNull);
         try{
             memberservice.delete(id);
         }catch(Exception e) {

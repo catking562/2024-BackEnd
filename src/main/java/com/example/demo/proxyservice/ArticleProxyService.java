@@ -48,7 +48,8 @@ public class ArticleProxyService {
         return articleservice.update(id, request);
     }
 
-    public void delete(Long id) {
+    public void delete(Long id) throws HTTPApiException {
+        if(!articleservice.isExist(id)) throw new HTTPApiException(ExceptionType.Article_IsNull);
         articleservice.delete(id);
     }
 }
