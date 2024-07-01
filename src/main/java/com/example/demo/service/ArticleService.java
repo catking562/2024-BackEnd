@@ -47,12 +47,15 @@ public class ArticleService {
 
     @Transactional
     public ArticleResponse create(ArticleCreateRequest request) {
+        Member member = memberRepository.findById(request.authorId()).get();
+        Board board = boardRepository.findById(request.boardId()).get();
         Article article = new Article(
-            memberRepository.findById(request.authorId()).get(),
-            boardRepository.findById(request.boardId()).get(),
+            member,
+            board,
             request.title(),
             request.description()
         );
+        article.convenienceMethod(member, board);
         Article saved = articleRepository.insert(article);
         return ArticleResponse.of(saved);
     }
@@ -67,7 +70,7 @@ public class ArticleService {
         Board board = boardRepository.findById(request.boardId()).get();
         Article article = articleRepository.findById(id).get();
         article.update(member, board, request.title(), request.description());
-
+        article.convenienceMethod(member, board);
         Article updated = articleRepository.update(article);
         return ArticleResponse.of(updated);
     }

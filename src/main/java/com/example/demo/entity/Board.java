@@ -25,6 +25,10 @@ public class Board {
         this.name = name;
     }
 
+    public void addArticle(Article article) {
+        articles.add(article);
+    }
+
     public Board(String name) {
         this.name = name;
     }

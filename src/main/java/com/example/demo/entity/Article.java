@@ -58,6 +58,11 @@ public class Article {
         this.modifiedAt = LocalDateTime.now();
     }
 
+    public void convenienceMethod(Member author, Board board) {
+        author.addArticle(this);
+        board.addArticle(this);
+    }
+
     public void setModifiedAt(LocalDateTime modifiedAt) {
         this.modifiedAt = modifiedAt;
     }
