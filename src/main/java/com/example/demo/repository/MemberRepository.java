@@ -29,8 +29,7 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
 
     default Boolean isExistEmail(Long notthis, String email) {
         try{
-            findByEmail(notthis, email);
-            return true;
+            return findByEmail(notthis, email).getEmail().equalsIgnoreCase(email);
         }catch(Exception e) {
             return false;
         }
