@@ -2,7 +2,9 @@ package com.example.demo.service;
 
 import java.util.List;
 
+import com.example.demo.exception.HTTPApiException;
 import com.example.demo.repository.MemberRepository;
+import com.example.demo.util.SHA;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,9 +36,9 @@ public class MemberService {
     }
 
     @Transactional
-    public MemberResponse create(MemberCreateRequest request) {
+    public MemberResponse create(MemberCreateRequest request) throws HTTPApiException {
         Member member = memberRepository.insert(
-            new Member(request.name(), request.email(), request.password())
+            new Member(request.name(), request.email(), SHA.sha3_512(request.password()))
         );
         return MemberResponse.from(member);
     }

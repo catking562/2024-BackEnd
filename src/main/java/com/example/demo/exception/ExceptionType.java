@@ -2,6 +2,7 @@ package com.example.demo.exception;
 
 public enum ExceptionType {
 
+    Server_Error(505, "알 수 없는 서버 에러 (벡엔드 개발자에게 직접 문의해주세요.)"),
     Member_NotNullName(400, "'name' 값이 Null이 될 수 없습니다."),
     Member_NotNullEmail(400, "'email' 값이 Null이 될 수 없습니다."),
     Member_NotNullPassWord(400, "'password' 값이 Null이 될 수 없습니다."),
