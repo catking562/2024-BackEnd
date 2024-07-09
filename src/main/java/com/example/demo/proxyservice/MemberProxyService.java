@@ -3,17 +3,23 @@ package com.example.demo.proxyservice;
 import com.example.demo.controller.dto.request.MemberCreateRequest;
 import com.example.demo.controller.dto.request.MemberUpdateRequest;
 import com.example.demo.controller.dto.response.MemberResponse;
+import com.example.demo.entity.Article;
+import com.example.demo.entity.Member;
 import com.example.demo.exception.ExceptionType;
 import com.example.demo.exception.HTTPApiException;
 import com.example.demo.service.MemberService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.SessionAttribute;
 
 import java.util.List;
 
 @Service
 public class MemberProxyService {
 
-    MemberService memberservice;
+    private final MemberService memberservice;
 
     public MemberProxyService(MemberService memberservice) {
         this.memberservice = memberservice;

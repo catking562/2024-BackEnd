@@ -13,7 +13,7 @@ import java.util.List;
 @Service
 public class BoardProxyService {
 
-    BoardService boardservice;
+    private final BoardService boardservice;
 
     public BoardProxyService(BoardService boardservice) {
         this.boardservice = boardservice;

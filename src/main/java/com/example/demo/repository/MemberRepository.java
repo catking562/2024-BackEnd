@@ -27,6 +27,9 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
     @Query("SELECT p FROM Member p WHERE NOT p.id = :notthis AND p.email = :email")
     Member findByEmail(Long notthis, String email);
 
+    @Query("SELECT p FROM Member p WHERE p.email = :email AND p.password = :pw")
+    Member findWithLogin(String email, String pw);
+
     default Boolean isExistEmail(Long notthis, String email) {
         try{
             return findByEmail(notthis, email).getEmail().equalsIgnoreCase(email);

@@ -13,7 +13,7 @@ import java.util.List;
 @Service
 public class ArticleProxyService {
 
-    ArticleService articleservice;
+    private final ArticleService articleservice;
 
     public ArticleProxyService(ArticleService articleservice) {
         this.articleservice = articleservice;
